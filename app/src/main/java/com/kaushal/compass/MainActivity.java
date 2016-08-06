@@ -8,6 +8,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
@@ -24,6 +25,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private float[] rotationMatrix = new float[9];
     private float[] orientation = new float[3];
     private float currentDegree = 0f;
+    private int animationDuration = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,15 +71,11 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @NonNull
     private RotateAnimation getRotateAnimation(float azimuthInDegress) {
-        RotateAnimation rAnim = new RotateAnimation(
-                currentDegree,
-                -azimuthInDegress,
+        RotateAnimation rAnim = new RotateAnimation(currentDegree, -azimuthInDegress,
                 Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f);
-
-        rAnim.setDuration(1250);
-        rAnim.setFillAfter(true);
+                Animation.RELATIVE_TO_SELF, 0.5f);
+        rAnim.setDuration(animationDuration);
+        rAnim.setInterpolator(new LinearInterpolator());
         return rAnim;
     }
 
