@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -26,7 +27,6 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sensorManager = (SensorManager)getSystemService(SENSOR_SERVICE);
@@ -61,20 +61,24 @@ public class MainActivity extends Activity implements SensorEventListener {
             SensorManager.getOrientation(rotationMatrix, orientation);
             float azimuthInRadians = orientation[0];
             float azimuthInDegress = (float)(Math.toDegrees(azimuthInRadians)+360)%360;
-            RotateAnimation ra = new RotateAnimation(
-                    currentDegree,
-                    -azimuthInDegress,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f);
-
-            ra.setDuration(250);
-
-            ra.setFillAfter(true);
-
-            pointer.startAnimation(ra);
+            RotateAnimation rAnim = getRotateAnimation(azimuthInDegress);
+            pointer.startAnimation(rAnim);
             currentDegree = -azimuthInDegress;
         }
+    }
+
+    @NonNull
+    private RotateAnimation getRotateAnimation(float azimuthInDegress) {
+        RotateAnimation rAnim = new RotateAnimation(
+                currentDegree,
+                -azimuthInDegress,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f);
+
+        rAnim.setDuration(1250);
+        rAnim.setFillAfter(true);
+        return rAnim;
     }
 
     @Override
